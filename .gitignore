@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.pyc
+outputs/*.docx
+logs/*.log
+dist/
+build/
+*.spec
+*.egg-info/
+.venv/
+venv/

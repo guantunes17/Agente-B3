@@ -74,12 +74,22 @@ def executar_agente(
         # ── Etapa 1: Extração ──────────────────────────────────────────────
         _cb(1, total_etapas, "Extraindo dados das fontes...")
         import pandas as pd
+        from extractors.up2data_cloud import UP2DataCloudExtractor
+        from extractors.up2data_client import UP2DataClientExtractor
         from extractors.anbima import AnbimaExtractor
         from extractors.cvm import CVMExtractor
         from extractors.bacen import BacenExtractor
         from extractors.b3_rjlf import B3RjlfExtractor
 
-        extratores = [AnbimaExtractor(), CVMExtractor(), BacenExtractor(), B3RjlfExtractor()]
+        # UP2DATA é a fonte primária e mais completa; fontes públicas são complementares
+        extratores = [
+            UP2DataCloudExtractor(),
+            UP2DataClientExtractor(),
+            AnbimaExtractor(),
+            CVMExtractor(),
+            BacenExtractor(),
+            B3RjlfExtractor(),
+        ]
         fontes_usadas = []
         frames = []
 
@@ -101,6 +111,10 @@ def executar_agente(
             return resultado
 
         df_bruto = pd.concat(frames, ignore_index=True)
+        # Remover duplicatas do UP2DATA + fontes públicas pela chave (isin, data_emissao)
+        chaves_dedup = [c for c in ("isin", "data_emissao") if c in df_bruto.columns]
+        if chaves_dedup:
+            df_bruto = df_bruto.drop_duplicates(subset=chaves_dedup, keep="first")
         total_bruto = len(df_bruto)
         logger.info(f"Total bruto consolidado: {total_bruto} registros de {len(fontes_usadas)} fonte(s).")
 

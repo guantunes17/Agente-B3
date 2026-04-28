@@ -12,6 +12,11 @@ _CHAVES = {
     "b3_certificado": "B3_CERTIFICADO_PFX",
     "anbima_client_id": "ANBIMA_CLIENT_ID",
     "anbima_client_secret": "ANBIMA_CLIENT_SECRET",
+    "up2data_client_id": "UP2DATA_CLIENT_ID",
+    "up2data_client_secret": "UP2DATA_CLIENT_SECRET",
+    "up2data_cert_path": "UP2DATA_CERT_PATH",
+    "up2data_cert_password": "UP2DATA_CERT_PASSWORD",
+    "up2data_client_path": "UP2DATA_CLIENT_PATH",
 }
 
 try:
@@ -72,11 +77,25 @@ def tem_credenciais_anbima() -> bool:
     return bool(client_id)
 
 
+def tem_credenciais_up2data_cloud() -> bool:
+    """Verifica se as credenciais UP2DATA Cloud estão configuradas."""
+    return bool(obter_credencial("up2data_client_id"))
+
+
+def tem_credenciais_up2data_client() -> bool:
+    """Verifica se o diretório do UP2DATA Client está configurado e existe."""
+    from pathlib import Path
+    path = obter_credencial("up2data_client_path")
+    return bool(path) and Path(path).exists()
+
+
 def status_credenciais() -> dict[str, bool]:
     """Retorna o status de cada fonte de dados."""
     return {
         "b3": tem_credenciais_b3(),
         "anbima": tem_credenciais_anbima(),
+        "up2data_cloud": tem_credenciais_up2data_cloud(),
+        "up2data_client": tem_credenciais_up2data_client(),
     }
 
 

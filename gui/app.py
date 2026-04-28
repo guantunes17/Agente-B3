@@ -128,7 +128,12 @@ class AgenteB3App:
         self.pill_anbima = tk.Label(frame, text="● ANBIMA  —  não configurado",
                                      font=FONTS["small"], padx=10, pady=3,
                                      bg=COLORS["bg_secondary"], fg=COLORS["text_muted"])
-        self.pill_anbima.pack(side="left")
+        self.pill_anbima.pack(side="left", padx=(0, 8))
+
+        self.pill_up2data = tk.Label(frame, text="● UP2DATA  —  não configurado",
+                                      font=FONTS["small"], padx=10, pady=3,
+                                      bg=COLORS["bg_secondary"], fg=COLORS["text_muted"])
+        self.pill_up2data.pack(side="left")
 
     def _atualizar_pills_status(self):
         from gui.credentials import status_credenciais
@@ -147,6 +152,22 @@ class AgenteB3App:
         else:
             self.pill_anbima.config(text="● ANBIMA  —  não configurado",
                                     bg=COLORS["bg_secondary"], fg=COLORS["text_muted"])
+
+        cloud = status.get("up2data_cloud", False)
+        client = status.get("up2data_client", False)
+        if cloud and client:
+            texto = "● UP2DATA  —  Cloud + Client"
+            bg, fg = COLORS["success_bg"], COLORS["success"]
+        elif cloud:
+            texto = "● UP2DATA  —  Cloud ativo"
+            bg, fg = COLORS["success_bg"], COLORS["success"]
+        elif client:
+            texto = "● UP2DATA  —  Client ativo"
+            bg, fg = COLORS["success_bg"], COLORS["success"]
+        else:
+            texto = "● UP2DATA  —  não configurado"
+            bg, fg = COLORS["bg_secondary"], COLORS["text_muted"]
+        self.pill_up2data.config(text=texto, bg=bg, fg=fg)
 
     # ── Painel de filtros ──────────────────────────────────────────────────
 

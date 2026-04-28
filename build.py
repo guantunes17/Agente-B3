@@ -28,6 +28,10 @@ def main():
         f"--add-data={raiz / 'presets'}{_sep()}presets",
         f"--add-data={raiz / 'assets'}{_sep()}assets",
         # Imports ocultos
+        "--hidden-import=customtkinter",
+        "--hidden-import=PIL",
+        "--hidden-import=PIL.Image",
+        "--hidden-import=PIL.ImageDraw",
         "--hidden-import=keyring",
         "--hidden-import=keyring.backends",
         "--hidden-import=keyring.backends.Windows",

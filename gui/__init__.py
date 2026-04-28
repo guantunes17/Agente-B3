@@ -1,1 +1,1 @@
-"""Pacote da interface gráfica do Agente B3."""
+"""Pacote GUI do Agente B3 — CustomTkinter."""
